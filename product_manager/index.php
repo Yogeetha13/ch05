@@ -38,10 +38,28 @@ if ($action == 'list_products') {
     $categories = get_categories();
     include('product_add.php');
 } else if ($action == 'list_categories'){
+  $categories = get_categories();
   include('category_list.php');
+  } else if ($action == 'add_category'){
+  $name = filter_input(INPUT_POST, 'name');
+  if($name == NULL || $name == FALSE){
+  $error = 'please enter a name';
+  include('../errors/error.php');
+} else {
+add_category($name);
+  header("Location: .?action=list_categories");
+  }
+  } else if ($action == 'delete_category'){
+$category_id = filter_input(INPUT_POST, 'category_id',FILTER_VALIDATE_INT);
+if($category_id == NULL || $category_id == FALSE) {
+    $error = 'invalid category id';
+    include('../errors/error.php');
+} else {
+    delete_category($category_id);
+    header("Location: .?action=list_categories");
+}
 } else if ($action == 'add_product') {
-    $category_id = filter_input(INPUT_POST, 'category_id', 
-            FILTER_VALIDATE_INT);
+    $category_id = filter_input(INPUT_POST, 'category_id',FILTER_VALIDATE_INT);
     $code = filter_input(INPUT_POST, 'code');
     $name = filter_input(INPUT_POST, 'name');
     $price = filter_input(INPUT_POST, 'price');
